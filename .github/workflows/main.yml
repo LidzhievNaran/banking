@@ -1,24 +1,46 @@
-name: CI
+name: building_tests
 on: [ push ]
 jobs:
-  building:
+  building_gtests:
     runs-on: ubuntu-latest
 
     steps:
       - name: checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v1
 
       - name: build
         shell: bash
-        run:
+        run: |
+          git submodule update --init --recursive
           cmake -B build
-        cd build
-        make
+          cd build
+          make
   testing:
     runs-on: ubuntu-latest
+
     steps:
-      - name: test
+      - name: chekout
+        uses: actions/checkout@v2
+
+      - name: tests
         shell: bash
-        run:
+        run: |
+          git submodule update --init --recursive
+          cmake -B build
           cd build
-          ./tests 
+          make
+          ./tests
+
+      - name: install lcov
+        run: |
+          sudo apt-get install -y lcov
+      - name: run lcov
+        run: |
+          lcov --capture --directory build/CMakeFiles/banking.dir/banking --output-file lcov.info
+          lcov --remove lcov.info '/usr/include/*' -o lcov.info
+          lcov --remove lcov.info '/home/banking_lab/third-party/gtest/*' -o lcov.info
+      - name: coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: "./lcov.info"
+          github-token: ${{ secrets.github_token }}
