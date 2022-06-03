@@ -23,7 +23,7 @@ if (BUILD_TESTS)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
     endif()
     enable_testing()
-    add_subdirectory(third-party/gtest)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}third-party/gtest)
     add_executable(tests
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/tests.cpp)
     target_link_libraries(tests ${PROJECT_NAME} gtest_main gmock_main)
