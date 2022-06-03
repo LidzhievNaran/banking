@@ -7,6 +7,7 @@
 #include <Transaction.h>
 #include <Account.h>
 
+
 TEST(Transaction, fee_test) {
     Account John(228, 101);
     Account James(1337, 0);
