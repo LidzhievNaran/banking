@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.14)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(BUILD_TESTS "Build tests" ON)
-option(COVERAGE "Coverage" ON)
-
 project(banking)
+
+option(BUILD_TESTS "Building tests" ON)
+option(COVERAGE "Coverage" ON)
 
 add_library(${PROJECT_NAME} STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/banking/Account.cpp
@@ -23,9 +23,9 @@ if (BUILD_TESTS)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
     endif()
     enable_testing()
-    add_subdirectory(home/banking_lab/third-party/gtest)
+    add_subdirectory(third-party/gtest)
     add_executable(tests
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp)
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/tests.cpp)
     target_link_libraries(tests ${PROJECT_NAME} gtest_main gmock_main)
-    add_test(NAME unit_tests COMMAND tests)
-endif()
+    add_test(NAME unit_test COMMAND tests)
+endif ()
